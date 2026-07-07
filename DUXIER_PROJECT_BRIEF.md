@@ -96,10 +96,21 @@ A searchable anonymised database only solves the *lowest-value* part of the prob
 ## 6. What Claude Code Should Do Next
 
 **Immediate (repo + deploy):**
-1. Create a new GitHub repo: `duxier-tax-recruitment` (public or private per Paul's preference).
-2. Push the existing local commit from `/home/claude/duxier/` (or re-create from the HTML file in this brief's companion output) as the initial commit on `main`.
-3. Wire up GitHub Pages *or* deploy via Vercel/Netlify — confirm which with Paul; if a custom domain (`duxiertaxrecruitment.com`) is ready, point DNS at whichever host is chosen.
+1. ~~Create a new GitHub repo: `duxier-tax-recruitment`.~~ **Done** — public repo at [github.com/mcfearless75/duxier-tax-recruitment](https://github.com/mcfearless75/duxier-tax-recruitment).
+2. ~~Push the existing local commit.~~ **Done** — pushed to `main`.
+3. ~~Wire up GitHub Pages, point custom domain.~~ **Done** — GitHub Pages enabled on `main` root, `CNAME` file set to `duxiertaxrecruitment.com`. **Outstanding: add the DNS records at GoDaddy (below) to complete the link** — Pages is live now on the default `mcfearless75.github.io/duxier-tax-recruitment/` URL and will pick up the custom domain once DNS resolves.
 4. Wire the two lead-capture forms in the HTML to an actual endpoint (Formspree/simple serverless function/Airtable — pick the lightest option that doesn't block launch).
+
+**GoDaddy DNS records needed for `duxiertaxrecruitment.com`:**
+| Type | Name | Value |
+|------|------|-------|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | mcfearless75.github.io |
+
+Set these in GoDaddy DNS management. Once they propagate, GitHub Pages verifies the domain automatically and issues an HTTPS certificate (usually within an hour, sometimes up to 24h).
 
 **Before opening firm access (not urgent, but sequence matters):**
 5. Decide and build the monetisation mechanic (subscription paywall vs pay-per-reveal vs candidate premium) — this determines whether firm-side auth/billing needs to exist before any real search feature ships.
