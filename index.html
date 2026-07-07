@@ -333,6 +333,9 @@
   .lead-panel input:focus{outline:2px solid var(--brass);outline-offset:1px;}
   .lead-success{display:none;font-family:var(--mono);font-size:0.85rem;color:var(--forest);padding:10px 0;}
   .lead-success.active{display:block;}
+  .lead-error{display:none;font-family:var(--mono);font-size:0.82rem;color:#B3432F;padding:10px 0 0;}
+  .lead-error.active{display:block;}
+  .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 
   footer{
     background:var(--ink);color:var(--ink-text-dim);
@@ -523,28 +526,36 @@
 
     <div class="lead-panel" id="panel-firm">
       <h4>Firm registration</h4>
-      <form onsubmit="return submitLead(event,'firm')">
+      <form id="form-firm" onsubmit="return submitLead(event,'firm')">
         <label for="f-name">Full name</label>
-        <input id="f-name" type="text" required>
+        <input id="f-name" name="name" type="text" required>
         <label for="f-firm">Firm name</label>
-        <input id="f-firm" type="text" required>
+        <input id="f-firm" name="firm" type="text" required>
         <label for="f-email">Work email</label>
-        <input id="f-email" type="email" required>
+        <input id="f-email" name="email" type="email" required>
+        <input type="hidden" name="_subject" value="Duxier — new FIRM registration">
+        <input type="hidden" name="enquiry_type" value="Firm registration">
+        <input type="text" name="_gotcha" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit" class="btn btn-primary" style="width:100%;">Request access</button>
+        <div class="lead-error" id="error-firm"></div>
       </form>
       <div class="lead-success" id="success-firm">✓ Received. We'll be in touch as firm access opens.</div>
     </div>
 
     <div class="lead-panel" id="panel-candidate">
       <h4>Tax professional registration</h4>
-      <form onsubmit="return submitLead(event,'candidate')">
+      <form id="form-candidate" onsubmit="return submitLead(event,'candidate')">
         <label for="c-role">Current role / discipline</label>
-        <input id="c-role" type="text" placeholder="e.g. VAT Manager, HMRC" required>
+        <input id="c-role" name="role" type="text" placeholder="e.g. VAT Manager, HMRC" required>
         <label for="c-pqe">PQE / years' experience</label>
-        <input id="c-pqe" type="text" required>
+        <input id="c-pqe" name="pqe" type="text" required>
         <label for="c-email">Personal email (kept private)</label>
-        <input id="c-email" type="email" required>
+        <input id="c-email" name="email" type="email" required>
+        <input type="hidden" name="_subject" value="Duxier — new CANDIDATE registration">
+        <input type="hidden" name="enquiry_type" value="Candidate registration">
+        <input type="text" name="_gotcha" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit" class="btn btn-primary" style="width:100%;">List in confidence</button>
+        <div class="lead-error" id="error-candidate"></div>
       </form>
       <div class="lead-success" id="success-candidate">✓ Received. Your details stay private — we'll follow up directly.</div>
     </div>
@@ -560,6 +571,7 @@
         <a href="#compare">Vs. agencies</a>
         <a href="#trust">Confidentiality</a>
         <a href="#join">Get access</a>
+        <a href="mailto:info@duxiertaxrecruitment.com">info@duxiertaxrecruitment.com</a>
       </div>
     </div>
     <p class="fine">DUXIER TAX RECRUITMENT — CONFIDENTIAL BY DESIGN. NO PLACEMENT PERCENTAGE. UK TAX SPECIALISTS ONLY.</p>
@@ -579,10 +591,55 @@
     document.getElementById('panel-candidate').classList.toggle('active', which==='candidate');
     setTimeout(()=>{ document.getElementById('panel-'+which).scrollIntoView({behavior:'smooth', block:'center'}); }, 60);
   }
-  function submitLead(evt, type){
+
+  const FORMSPREE_ENDPOINTS = {
+    firm: 'https://formspree.io/f/mkolanjv',
+    candidate: 'https://formspree.io/f/mkolanjv'
+  };
+
+  async function submitLead(evt, type){
     evt.preventDefault();
-    evt.target.style.display='none';
-    document.getElementById('success-'+type).classList.add('active');
+    const form = evt.target;
+    const errorEl = document.getElementById('error-'+type);
+    const submitBtn = form.querySelector('button[type="submit"]');
+    errorEl.classList.remove('active');
+    errorEl.textContent = '';
+
+    if (form._gotcha && form._gotcha.value) {
+      // honeypot filled — silently drop, show success so bots gain no signal
+      form.style.display = 'none';
+      document.getElementById('success-'+type).classList.add('active');
+      return false;
+    }
+
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINTS[type], {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
+
+      if (response.ok) {
+        form.style.display = 'none';
+        document.getElementById('success-'+type).classList.add('active');
+      } else {
+        const data = await response.json().catch(() => null);
+        const message = data?.errors?.[0]?.message || 'Something went wrong. Please try again or email us directly.';
+        errorEl.textContent = message;
+        errorEl.classList.add('active');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
+    } catch (err) {
+      errorEl.textContent = 'Could not reach the server. Check your connection and try again.';
+      errorEl.classList.add('active');
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+    }
     return false;
   }
 </script>
