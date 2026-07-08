@@ -162,9 +162,12 @@
   .navlinks{display:flex;gap:32px;align-items:center;font-size:0.92rem;font-weight:500;}
   .navlinks a{text-decoration:none;color:var(--slate);transition:color .15s;}
   .navlinks a:hover{color:var(--paper-text);}
-  .nav-ctas{display:flex;gap:10px;}
+  .nav-ctas{display:flex;gap:10px;align-items:center;}
   .nav-ctas .btn{padding:10px 18px;font-size:0.85rem;}
+  .portal-login-link{text-decoration:none;color:var(--slate);font-size:0.85rem;font-weight:500;margin-right:4px;transition:color .15s;}
+  .portal-login-link:hover{color:var(--paper-text);}
   @media (max-width:860px){ .navlinks{display:none;} }
+  @media (max-width:640px){ .portal-login-link{display:none;} }
 
   /* ===== HERO ===== */
   .hero{
@@ -408,8 +411,9 @@
       <a href="#trust">Confidentiality</a>
     </div>
     <div class="nav-ctas">
+      <a href="https://web-production-82782.up.railway.app/login" class="portal-login-link">Portal login</a>
       <a href="#join-candidate" class="btn btn-outline-dark">For professionals</a>
-      <a href="https://web-production-82782.up.railway.app/register" class="btn btn-dark">For firms</a>
+      <a href="#join-firm" class="btn btn-dark">For firms</a>
     </div>
   </nav>
 </header>
@@ -421,7 +425,7 @@
       <h1>Firms don't need another agency.<br>They need to see who's <em>already</em> looking.</h1>
       <p class="lede">Duxier is where tax professionals — including current HMRC and in-house staff — list themselves in confidence, and firms search directly. No 20–30% placement fee. No recruiter running a process you could run yourselves.</p>
       <div class="hero-ctas">
-        <a href="https://web-production-82782.up.railway.app/register" class="btn btn-primary">Search candidates — for firms</a>
+        <a href="#join-firm" class="btn btn-primary">Search candidates — for firms</a>
         <a href="#join-candidate" class="btn btn-ghost">List in confidence — for professionals</a>
       </div>
       <span class="hero-note">DXR // no placement percentage · identity hidden until you choose otherwise</span>
@@ -490,7 +494,7 @@
           <li><span class="step-idx">03</span><div class="step-body"><b>Request a reveal</b><span>Interested in a profile? Send a request. The candidate decides whether to be identified to you.</span></div></li>
           <li><span class="step-idx">04</span><div class="step-body"><b>Contact directly, hire directly</b><span>Once revealed, you deal with the candidate yourselves. No placement percentage sitting on top of the offer.</span></div></li>
         </ul>
-        <div class="path-cta"><a href="https://web-production-82782.up.railway.app/register" class="btn btn-dark">Register as a firm</a></div>
+        <div class="path-cta"><a href="#join-firm" class="btn btn-dark">Register as a firm</a></div>
       </div>
       <div class="path dark">
         <span class="path-tag">For tax professionals</span>
@@ -563,8 +567,26 @@
     <h2>Duxier is opening its first cohort of firms and candidates.</h2>
     <p>Register now to be part of the first search-ready pool — early firms get preferential access before general launch; early candidates get first pick of who reveals to whom.</p>
     <div class="cta-buttons">
-      <a href="https://web-production-82782.up.railway.app/register" class="btn btn-dark">Register — I'm a firm</a>
+      <a href="#join-firm" class="btn btn-dark" onclick="showPanel('firm')">Register — I'm a firm</a>
       <a href="#join-candidate" class="btn btn-outline-dark" onclick="showPanel('candidate')">Register — I'm a tax professional</a>
+    </div>
+
+    <div class="lead-panel" id="panel-firm">
+      <h4>Firm registration</h4>
+      <form id="form-firm" onsubmit="return submitLead(event,'firm')">
+        <label for="f-name">Full name</label>
+        <input id="f-name" name="name" type="text" required>
+        <label for="f-firm">Firm name</label>
+        <input id="f-firm" name="firm" type="text" required>
+        <label for="f-email">Work email</label>
+        <input id="f-email" name="email" type="email" required>
+        <input type="hidden" name="_subject" value="Duxier — new FIRM registration">
+        <input type="hidden" name="enquiry_type" value="Firm registration">
+        <input type="text" name="_gotcha" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-primary" style="width:100%;">Request access</button>
+        <div class="lead-error" id="error-firm"></div>
+      </form>
+      <div class="lead-success" id="success-firm">✓ Received. We'll be in touch as firm access opens.</div>
     </div>
 
     <div class="lead-panel" id="panel-candidate">
@@ -612,11 +634,13 @@
   revealEls.forEach(el=>io.observe(el));
 
   function showPanel(which){
+    document.getElementById('panel-firm').classList.toggle('active', which==='firm');
     document.getElementById('panel-candidate').classList.toggle('active', which==='candidate');
     setTimeout(()=>{ document.getElementById('panel-'+which).scrollIntoView({behavior:'smooth', block:'center'}); }, 60);
   }
 
   const FORMSPREE_ENDPOINTS = {
+    firm: 'https://formspree.io/f/mkolanjv',
     candidate: 'https://formspree.io/f/mkolanjv'
   };
 
