@@ -421,8 +421,8 @@
     </div>
     <div class="nav-ctas">
       <a href="https://web-production-82782.up.railway.app/login" class="portal-login-link">Portal login</a>
-      <a href="#join-candidate" class="btn btn-outline-dark">For professionals</a>
-      <a href="#join-firm" class="btn btn-dark">For firms</a>
+      <a href="#join" class="btn btn-outline-dark" onclick="showPanel('candidate')">For professionals</a>
+      <a href="#join" class="btn btn-dark" onclick="showPanel('firm')">For firms</a>
     </div>
   </nav>
 </header>
@@ -434,8 +434,8 @@
       <h1>Firms don't need another agency.<br>They need to see who's <em>already</em> looking.</h1>
       <p class="lede">Duxier is where tax professionals — including current HMRC and in-house staff — list themselves in confidence, and firms search directly. No 20–30% placement fee. No recruiter running a process you could run yourselves.</p>
       <div class="hero-ctas">
-        <a href="#join-firm" class="btn btn-primary">Search candidates — for firms</a>
-        <a href="#join-candidate" class="btn btn-ghost">List in confidence — for professionals</a>
+        <a href="#join" class="btn btn-primary" onclick="showPanel('firm')">Search candidates — for firms</a>
+        <a href="#join" class="btn btn-ghost" onclick="showPanel('candidate')">List in confidence — for professionals</a>
       </div>
       <span class="hero-note">DXR // no placement percentage · identity hidden until you choose otherwise</span>
     </div>
@@ -503,7 +503,7 @@
           <li><span class="step-idx">03</span><div class="step-body"><b>Request a reveal</b><span>Interested in a profile? Send a request. The candidate decides whether to be identified to you.</span></div></li>
           <li><span class="step-idx">04</span><div class="step-body"><b>Contact directly, hire directly</b><span>Once revealed, you deal with the candidate yourselves. No placement percentage sitting on top of the offer.</span></div></li>
         </ul>
-        <div class="path-cta"><a href="#join-firm" class="btn btn-dark">Register as a firm</a></div>
+        <div class="path-cta"><a href="#join" class="btn btn-dark" onclick="showPanel('firm')">Register as a firm</a></div>
       </div>
       <div class="path dark">
         <span class="path-tag">For tax professionals</span>
@@ -514,7 +514,7 @@
           <li><span class="step-idx">03</span><div class="step-body"><b>Firms search, and request to connect</b><span>You're notified when a firm wants to know more. They still don't see who you are.</span></div></li>
           <li><span class="step-idx">04</span><div class="step-body"><b>You choose who sees you unredacted</b><span>Approve, decline, or ignore — no application, no interview, no exposure, unless you decide otherwise.</span></div></li>
         </ul>
-        <div class="path-cta"><a href="#join-candidate" class="btn btn-primary">List your profile</a></div>
+        <div class="path-cta"><a href="#join" class="btn btn-primary" onclick="showPanel('candidate')">List your profile</a></div>
       </div>
     </div>
   </div>
@@ -565,7 +565,7 @@
         <h3>Open to the right move, without being seen to look.</h3>
         <p>Not job-hunting. Not on LinkedIn as "open to work." Just curious what's out there without your current employer, department or team knowing. That's exactly what Duxier is built for — you list in confidence, firms come to you, and nothing about your identity moves without your say-so.</p>
       </div>
-      <div class="d-cta"><a href="#join-candidate" class="btn btn-outline-dark">List in confidence</a></div>
+      <div class="d-cta"><a href="#join" class="btn btn-outline-dark" onclick="showPanel('candidate')">List in confidence</a></div>
     </div>
   </div>
 </section>
@@ -576,8 +576,8 @@
     <h2>Duxier is opening its first cohort of firms and candidates.</h2>
     <p>Register now to be part of the first search-ready pool — early firms get preferential access before general launch; early candidates get first pick of who reveals to whom.</p>
     <div class="cta-buttons">
-      <a href="#join-firm" class="btn btn-dark" onclick="showPanel('firm')">Register — I'm a firm</a>
-      <a href="#join-candidate" class="btn btn-outline-dark" onclick="showPanel('candidate')">Register — I'm a tax professional</a>
+      <a href="#join" class="btn btn-dark" onclick="showPanel('firm')">Register — I'm a firm</a>
+      <a href="#join" class="btn btn-outline-dark" onclick="showPanel('candidate')">Register — I'm a tax professional</a>
     </div>
 
     <div class="lead-panel" id="panel-firm">
